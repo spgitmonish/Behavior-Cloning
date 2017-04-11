@@ -25,7 +25,9 @@ The model has the following layers(in order):
 4. Final output layer which predicts the steering angle
 
 Here is a detailed visualization of the model:
-![](https://devblogs.nvidia.com/parallelforall/wp-content/uploads/2016/08/cnn-architecture-624x890.png)
+<p align="center">
+  <img src="https://devblogs.nvidia.com/parallelforall/wp-content/uploads/2016/08/cnn-architecture-624x890.png">
+</p>
 
 The model expects an input array in the form 66(height)x200(width)x3(channels). The images array was normalized and converted to YUV.
 
@@ -39,8 +41,11 @@ Selecting the model up and running was the least time consuming. The other parts
 I definitely had to do step-by-step engineering to make the final model work for me. NVIDIA's model was hard to "tune" because the loss was so low from the get go because the model data was skewed towards driving straight.
 
 Here is the distribution of the steering angle from Udacity's dataset:
-![](https://s28.postimg.org/4bbqt2sil/Screen_Shot_2017_01_28_at_8_30_06_PM.png)
 
+<p align="center">
+  <img src="https://s28.postimg.org/4bbqt2sil/Screen_Shot_2017_01_28_at_8_30_06_PM.png">
+</p>
+  
 To counter this bias, one of the first things I did when preprocessing the dataset was to add an offset to the steering angles associated with the left(+ offset) and right(- offset) camera images. As pointed out by many in the forums, the idea behind adding/subtracting the offset is to, in effect, "bring the car back to the center". This is because the autonomous simulation only use images from the center camera. The other preprocessing was converting from RGB->YUV and normalization(same as the NVIDIA model, as mentioned earlier). I definitely used data augmentation using a generator because of memory constraints. One of the things I controlled during augmentation(this setting was a hyperparameter for my model) was the amount of data with zero steering angles allowed during each epoch of training.
 
 With the above mentioned preprocessing I was getting a loss close to 0% even after 5 epochs, this definitely was suspicious because when I ran my model in autonomous mode, the car didn't even work for the first few autonomous mode yards because it would drive itself off the road. I knew at this point that my model was definitely overfitting.
